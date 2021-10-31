@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.88.1" />
+
+
+<title>Nebraska&#39;s Defense in 2009 vs the 2021 Blackshirts - Nick Sehnert&#39;s GitHub Site</title>
+<meta property="og:title" content="Nebraska&#39;s Defense in 2009 vs the 2021 Blackshirts - Nick Sehnert&#39;s GitHub Site">
+
+
+  <link href='http://nicksehnert.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/nicksehnert">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/nick_sehnert">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">10 min read</span>
+    
+
+    <h1 class="article-title">Nebraska&#39;s Defense in 2009 vs the 2021 Blackshirts</h1>
+
+    
+    <span class="article-date">2021-10-25</span>
+    
+
+    <div class="article-content">
+      
+<script src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>A big discussion point this season is how good Nebraska’s Blackshirts were going to be. Heading into their week 0 match up against Illinois, majority of folks believed that since Nebraska returned so many super-seniors they would have little-to-no problem with the fighting Bret Bielemas. Nebraska’s 2009 defense was regarded as one of the best in the country and if they had any sort of offense in 2009, Nebraska would’ve competed for a national championship. Just for some extra spice, let’s compare the 2009 and 2021 Huskers defenses’ to the defenses’ of Oklahoma and Texas as well – because those are still Nebraska’s rivals.</p>
+<p>First we must install library(tidyverse), library(cowplot), library(ggalt), &amp; library(ggrepel).</p>
+<pre class="r"><code>library(tidyverse)
+library(cowplot)
+library(ggalt)
+library(ggrepel)</code></pre>
+<p>Next, we need to transfer all of our csv files to our environment.</p>
+<pre class="r"><code>PassingDefense2009 &lt;- read_csv(&quot;PassingDefense2009.csv&quot;)
+PassingDefense2021 &lt;- read_csv(&quot;PassingDefense2021.csv&quot;)
+RushingDefense2009 &lt;- read_csv(&quot;RushingDefense2009.csv&quot;)
+RushingDefense2021 &lt;- read_csv(&quot;RushingDefense2021.csv&quot;)
+ScoringDefense2009 &lt;- read_csv(&quot;ScoringDefense2009.csv&quot;)
+ScoringDefense2021 &lt;- read_csv(&quot;ScoringDefense2021.csv&quot;)
+TotalDefense2009 &lt;- read_csv(&quot;TotalDefense2009.csv&quot;)
+TotalDefense2021 &lt;- read_csv(&quot;TotalDefense2021.csv&quot;)</code></pre>
+<p>First, let’s look at Nebraska’s scoring defense compared to their rivals (at that time) for the 2009 season. Despite Nebraska not being in the Big 12 in 2021, we will still look at those teams since there are no true rivals for Nebraska in the BIG. To do that, we must filter out Nebraska, Texas, and Oklahoma.</p>
+<pre class="r"><code>NebraskaScoringDefense2009 &lt;- ScoringDefense2009 %&gt;% filter(Name == &#39;Nebraska&#39;) 
+TexasScoringDefense2009 &lt;- ScoringDefense2009 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaScoringDefense2009 &lt;- ScoringDefense2009 %&gt;% filter(Name == &#39;Oklahoma&#39;)
+NebraskaScoringDefense2021 &lt;- ScoringDefense2021 %&gt;% filter(Name == &#39;Nebraska&#39;)
+TexasScoringDefense2021 &lt;- ScoringDefense2021 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaScoringDefense2021 &lt;- ScoringDefense2021 %&gt;% filter(Name == &#39;Oklahoma&#39;)
+
+Top25ScoringDefense2009 &lt;- ScoringDefense2009 %&gt;% top_n(25, wt=-`Points/G`)
+Top25ScoringDefense2021 &lt;- ScoringDefense2021 %&gt;% top_n(25, wt=-`Points/G`)</code></pre>
+<p>Next, we must plot our data in a stacked bar chart while highlighting the teams we’re comparing. Unfortunately for the Longhorns of Texas, they did not make the Top-25 in 2009 so they’re nasty burnt orange color does not show up. However, we want to point out where Nebraska and Oklahoma are on the list.</p>
+<pre class="r"><code>ggplot() + 
+  geom_bar(data=Top25ScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
+  geom_bar(data=NebraskaScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;red&quot;) +
+  geom_bar(data=OklahomaScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;maroon&quot;) + 
+  geom_bar(data=TexasScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;orange&quot;) +
+  coord_flip() + 
+  labs(
+    title = &quot;WHAT? Nebraska is #1...Kinda&quot;, subtitle = &quot;If Nebraska had a competent offense in 2009, they compete for a national title&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;,
+    x = &quot;Team&quot;,
+    y = &quot;Average Points per Game&quot;) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-4-1.png" width="480" />
+Let’s put the chart we made above into a dataframe called “bar1”</p>
+<pre class="r"><code>bar1 &lt;- ggplot() + 
+  geom_bar(data=Top25ScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
+  geom_bar(data=NebraskaScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;red&quot;) +
+  geom_bar(data=OklahomaScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;maroon&quot;) + 
+  geom_bar(data=TexasScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;orange&quot;) +
+  coord_flip() + 
+  labs(
+    title = &quot;WHAT? Nebraska is #1...Kinda&quot;, subtitle = &quot;If Nebraska had a competent offense in 2009, they compete for a national title&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;,
+    x = &quot;Team&quot;,
+    y = &quot;Average Points per Game&quot;) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p>Now we must do the same thing for the Scoring Defense in 2021. Use the same code, just switch out the 2009 data for the 2021 Scoring Defense data.</p>
+<pre class="r"><code>ggplot() + 
+  geom_bar(data=Top25ScoringDefense2021, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
+  geom_bar(data=NebraskaScoringDefense2021, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;red&quot;) +
+  coord_flip() +
+  labs(
+    title = &quot;Nebraska Drops 24 Spots&quot;, subtitle = &quot;Nebraska has a top-25 scoring defense, but only three wins&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;,
+    x = &quot;Team&quot;,
+    y = &quot;Average Points per Game&quot;) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-6-1.png" width="480" />
+Let’s do the same thing with the 2021 Scoring Defense data but name it “bar2”</p>
+<pre class="r"><code>bar2 &lt;- ggplot() + 
+  geom_bar(data=Top25ScoringDefense2021, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
+  geom_bar(data=NebraskaScoringDefense2021, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`), fill=&quot;red&quot;) +
+  coord_flip() +
+  labs(
+    title = &quot;Nebraska Drops 24 Spots&quot;, subtitle = &quot;Nebraska has a top-25 scoring defense, but only three wins&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;,
+    x = &quot;Team&quot;,
+    y = &quot;Average Points per Game&quot;) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p>Finally, let’s make a cowplot. To do that, we must use the plot_grid function and include both “bar1” and “bar2”.</p>
+<pre class="r"><code>plot_grid(bar1, bar2)</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-8-1.png" width="624" />
+You can see that in 2009, Nebraska came in at #1, Oklahoma ranks at #7, and Texas finished the season at #12. In 2021, the Big 12 Conference statistically does not play “defense-first” football but the BIG does - so Nebraska comes in at #25 in 2021.</p>
+<p>Let’s look at Passing Defense for those same years, comparing the same teams. Is there a direct correlation between Passing Defense to Scoring Defense? We must filter each team we are comparing as well as make a list of the top-25 programs in terms of Passing Defense in 2009.</p>
+<pre class="r"><code>NebraskaPassingDefense2009 &lt;- PassingDefense2009 %&gt;% filter(Name == &#39;Nebraska&#39;) 
+TexasPassingDefense2009 &lt;- PassingDefense2009 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaPassingDefense2009 &lt;- PassingDefense2009 %&gt;% filter(Name == &#39;Oklahoma&#39;)
+NebraskaPassingDefense2021 &lt;- PassingDefense2021 %&gt;% filter(Name == &#39;Nebraska&#39;)
+TexasPassingDefense2021 &lt;- PassingDefense2021 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaPassingDefense2021 &lt;- PassingDefense2021 %&gt;% filter(Name == &#39;Oklahoma&#39;)
+
+Top25PassingDefense2009 &lt;- PassingDefense2009 %&gt;% top_n(25, wt=-`Yards/G`)
+Top25PassingDefense2021 &lt;- PassingDefense2021 %&gt;% top_n(25, wt=-`Yards/G`)</code></pre>
+<p>Now we can plot the 2009 Passing Defense Data in a lollipop chart.</p>
+<pre class="r"><code>ggplot() + 
+  geom_lollipop(
+    data=Top25PassingDefense2009, 
+    aes(y=reorder(Name, Yards/G), x=Yards/G),
+    horizontal = TRUE ) + 
+  geom_lollipop(
+    data=NebraskaPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;red&quot;) + 
+   geom_lollipop(
+    data=OklahomaPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;maroon&quot;) +
+     geom_lollipop(
+    data=TexasPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;orange&quot;) +
+    labs(
+      title = &quot;Mediocre Pass Defense in 2009&quot;, subtitle = &quot;Where do Nebraska, Oklahoma, and Texas rank?&quot;, x=&quot;Passing Yards per Game&quot;, y=&quot;Name&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+    theme_bw() +
+    theme(
+        plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-10-1.png" width="384" />
+By reading the lollipop chart, you can see that Nebraska, Oklahoma, and Texas were extremely similar in the amount of passing yards they allowed each game in 2009. But now let’s find out if any three of those teams rank in the top-25 this season!</p>
+<pre class="r"><code>ggplot() + 
+  geom_lollipop(
+    data=Top25PassingDefense2021, 
+    aes(y=reorder(Name, Yards/G), x=Yards/G),
+    horizontal = TRUE) +
+    (labs
+      (title = &quot;Have you Heard of Pass Defense?&quot;, subtitle = &quot;Everybody wants to go back to 2009&quot;, y=&quot;Name&quot;, x=&quot;Passing Yards per Game&quot;, y=&quot;Team&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;)) +
+    theme_bw()+ 
+    theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-11-1.png" width="384" />
+There is no color on that chart. None. Nebraska, Texas &amp; Oklahoma are all bad at pass defense in 2021. Oklahoma and Texas have an excuse because they are in the Big 12 so they give up a boatload of passing yards. But Nebraska is in the BIG – and they returned their entire secondary from last season, so they don’t have any good reason as to why they are not in the top-25 in terms of pass defense.</p>
+<p>So now we can make another cowplot putting these two lollipop charts side-by-side. We will do the same thing as we did for the bar graphs, but instead of labeling them “bar1” &amp; “bar2,” let’s name them “lollipop1” &amp; “lollipop2.”</p>
+<pre class="r"><code>lollipop1 &lt;-
+  ggplot() + 
+  geom_lollipop(
+    data=Top25PassingDefense2009, 
+    aes(y=reorder(Name, Yards/G), x=Yards/G),
+    horizontal = TRUE ) + 
+  geom_lollipop(
+    data=NebraskaPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;red&quot;) + 
+   geom_lollipop(
+    data=OklahomaPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;maroon&quot;) +
+     geom_lollipop(
+    data=TexasPassingDefense2009,
+    aes(y=Name, x=Yards/G),
+    horizontal = TRUE,
+    color = &quot;orange&quot;) +
+    labs(
+      title = &quot;Mediocre Pass Defense in 2009&quot;, subtitle = &quot;Where do Nebraska, Oklahoma, and Texas rank?&quot;, x=&quot;Passing Yards per Game&quot;, y=&quot;Name&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+    theme_bw() +
+    theme(
+        plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<pre class="r"><code>lollipop2 &lt;-
+  ggplot() + 
+  geom_lollipop(
+    data=Top25PassingDefense2021, 
+    aes(y=reorder(Name, Yards/G), x=Yards/G),
+    horizontal = TRUE) +
+    (labs
+      (title = &quot;Have you Heard of Pass Defense?&quot;, subtitle = &quot;Everybody wants to go back to 2009&quot;, y=&quot;Name&quot;, x=&quot;Passing Yards per Game&quot;, y=&quot;Team&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;)) +
+    theme_bw()+ 
+    theme(
+    plot.title = element_text(size = 20, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10),
+    plot.subtitle = element_text(size=10),
+    panel.grid.minor = element_blank())</code></pre>
+<p>Now that we have our dataframes created, we can use plot_grid once again and put the two lollipop charts next to each other.</p>
+<pre class="r"><code>plot_grid(lollipop1, lollipop2)</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-14-1.png" width="556.8" />
+Finally, let’s make our final chart. First, we will take a look at the rushing defense statistics for 2009 but this time, instead of comparing it to just the top-25 schools, let’s compare to all 120.</p>
+<pre class="r"><code>NebraskaRushingDefense2009 &lt;- RushingDefense2009 %&gt;% filter(Name == &#39;Nebraska&#39;) 
+TexasRushingDefense2009 &lt;- RushingDefense2009 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaRushingDefense2009 &lt;- RushingDefense2009 %&gt;% filter(Name == &#39;Oklahoma&#39;)
+NebraskaRushingDefense2021 &lt;- RushingDefense2021 %&gt;% filter(Name == &#39;Nebraska&#39;)
+TexasRushingDefense2021 &lt;- RushingDefense2021 %&gt;% filter(Name == &#39;Texas&#39;)
+OklahomaRushingDefense2021 &lt;- RushingDefense2021 %&gt;% filter(Name == &#39;Oklahoma&#39;)</code></pre>
+<p>So let’s start by comparing how the Avg Yards allowed per game and touchdowns given up are correlated. Don’t forget, we are still comparing the old Big 12 Rivals – Nebraska, Texas, &amp; Oklahoma, so we need to use geom_point to separate those three teams and identify them with the same color as our previous charts.</p>
+<p>First, We must combine the three teams into a dataframe so they have adequate space on our charts when we label them.</p>
+<pre class="r"><code>teamlabels2009 &lt;- bind_rows(OklahomaRushingDefense2009, NebraskaRushingDefense2009, TexasRushingDefense2009)
+teamlabels2021 &lt;- bind_rows(OklahomaRushingDefense2021, NebraskaRushingDefense2021, TexasRushingDefense2021)</code></pre>
+<pre class="r"><code>  ggplot() + 
+  geom_point(data=RushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;grey&quot;) +
+  geom_point(data=NebraskaRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;red&quot;) +
+  geom_point(data=OklahomaRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;Maroon&quot;) +
+  geom_point(data=TexasRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;orange&quot;) +
+  geom_text_repel(data=teamlabels2009, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  labs(title=&quot;A Strong Front Seven&quot;, subtitle=&quot;Few Rushing Yards allowed = Fewer TDs allowed&quot;, x=&quot;Rushing Yards Allowed per Game&quot;, y=&quot;Rushing Touchdowns Allowed&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+You can see that in 2009, Nebraska, Texas, and Oklahoma were on the good side of things – they didn’t allow many yards and very few rushing touchdowns on the year.</p>
+<p>Now, let’s go through the same process using the 2021 data.</p>
+<pre class="r"><code>ggplot() + 
+  geom_point(data=RushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;grey&quot;) +
+  geom_point(data=NebraskaRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;red&quot;) +
+  geom_point(data=OklahomaRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;maroon&quot;) +
+  geom_point(data=TexasRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;orange&quot;) +
+  geom_text_repel(data=NebraskaRushingDefense2021, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  geom_text_repel(data=TexasRushingDefense2021, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  geom_text_repel(data=OklahomaRushingDefense2021, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  labs(title=&quot;Woah, Nebraska can handle the run&quot;, subtitle=&quot;Experienced Front Sevens Produce Results&quot;, x=&quot;Rushing Yards Allowed per Game&quot;, y=&quot;Rushing Touchdowns Allowed&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank())</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+This season, Nebraska and Oklahoma are in a good spot - allowing less that 150 yards a game on the ground and less than 10 rushing TDs on the year. Texas…not so much. The Longhorns are allowing their Big 12 opponents to run for over 200 yards per game and have allowed 9 rushing touchdowns this season.</p>
+<p>So now we can make another cowplot putting these two scatterplots side-by-side. We will do the same thing as we did for the bar graphs, but instead of labeling them “bar1” &amp; “bar2,” let’s name them “scatterplot1” &amp; “scatterplot2.”</p>
+<pre class="r"><code>scatterplot1 &lt;-
+  ggplot() + 
+  geom_point(data=RushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;grey&quot;) +
+  geom_point(data=NebraskaRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;red&quot;) +
+  geom_point(data=OklahomaRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;Maroon&quot;) +
+  geom_point(data=TexasRushingDefense2009, aes(x=Yards/G, y=TD), color=&quot;orange&quot;) +
+  geom_text_repel(data=teamlabels2009, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  labs(title=&quot;A Strong Front Seven&quot;, subtitle=&quot;Few Rushing Yards allowed = Fewer TDs allowed&quot;, x=&quot;Rushing Yards Allowed per Game&quot;, y=&quot;Rushing Touchdowns Allowed&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank())</code></pre>
+<pre class="r"><code>scatterplot2 &lt;-
+  ggplot() + 
+  geom_point(data=RushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;grey&quot;) +
+  geom_point(data=NebraskaRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;red&quot;) +
+  geom_point(data=OklahomaRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;maroon&quot;) +
+  geom_point(data=TexasRushingDefense2021, aes(x=Yards/G, y=TD), color=&quot;orange&quot;) +
+  geom_text_repel(data=teamlabels2021, aes(x=Yards/G, y=TD, label=Name), color=&quot;Blue&quot;) +
+  labs(title=&quot;Woah, Nebraska can handle the run&quot;, subtitle=&quot;Experienced Front Sevens Produce Results&quot;, x=&quot;Rushing Yards Allowed per Game&quot;, y=&quot;Rushing Touchdowns Allowed&quot;, caption = &quot;Source: CFBstats.com | By Nick Sehnert&quot;) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 10), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank())</code></pre>
+<p>Now we can use plot_grid once again to put them side-by-side.</p>
+<pre class="r"><code>plot_grid(scatterplot1, scatterplot2)</code></pre>
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-21-1.png" width="576" />
+Surprisingly, Oklahoma has performed really well against the run this season. Part of that may be because the Big 12 doesn’t run the pigskin a ton but it also helps that Perrion Winfrey is a member of their front 4. Nebraska is allowing less than 140 yards per game and against the Purdue Boilermakers on Saturday, they were right on pace allowing 116 rushing yards.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
