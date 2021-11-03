@@ -118,7 +118,7 @@ Top25ScoringDefense2021 &lt;- ScoringDefense2021 %&gt;% top_n(25, wt=-`Points/G`
     axis.title = element_text(size = 10),
     plot.subtitle = element_text(size=10),
     panel.grid.minor = element_blank())</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-4-1.png" width="480" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 Let’s put the chart we made above into a dataframe called “bar1”</p>
 <pre class="r"><code>bar1 &lt;- ggplot() + 
   geom_bar(data=Top25ScoringDefense2009, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
@@ -151,7 +151,7 @@ Let’s put the chart we made above into a dataframe called “bar1”</p>
     axis.title = element_text(size = 10),
     plot.subtitle = element_text(size=10),
     panel.grid.minor = element_blank())</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-6-1.png" width="480" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 Let’s do the same thing with the 2021 Scoring Defense data but name it “bar2”</p>
 <pre class="r"><code>bar2 &lt;- ggplot() + 
   geom_bar(data=Top25ScoringDefense2021, aes(x=reorder(Name, -`Points/G`), weight=`Points/G`)) + 
@@ -169,7 +169,7 @@ Let’s do the same thing with the 2021 Scoring Defense data but name it “bar2
     panel.grid.minor = element_blank())</code></pre>
 <p>Finally, let’s make a cowplot. To do that, we must use the plot_grid function and include both “bar1” and “bar2”.</p>
 <pre class="r"><code>plot_grid(bar1, bar2)</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-8-1.png" width="624" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-8-1.png" width="768" />
 You can see that in 2009, Nebraska came in at #1, Oklahoma ranks at #7, and Texas finished the season at #12. In 2021, the Big 12 Conference statistically does not play “defense-first” football but the BIG does - so Nebraska comes in at #25 in 2021.</p>
 <p>Let’s look at Passing Defense for those same years, comparing the same teams. Is there a direct correlation between Passing Defense to Scoring Defense? We must filter each team we are comparing as well as make a list of the top-25 programs in terms of Passing Defense in 2009.</p>
 <pre class="r"><code>NebraskaPassingDefense2009 &lt;- PassingDefense2009 %&gt;% filter(Name == &#39;Nebraska&#39;) 
@@ -210,7 +210,7 @@ Top25PassingDefense2021 &lt;- PassingDefense2021 %&gt;% top_n(25, wt=-`Yards/G`)
     axis.title = element_text(size = 10),
     plot.subtitle = element_text(size=10),
     panel.grid.minor = element_blank())</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-10-1.png" width="384" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 By reading the lollipop chart, you can see that Nebraska, Oklahoma, and Texas were extremely similar in the amount of passing yards they allowed each game in 2009. But now let’s find out if any three of those teams rank in the top-25 this season!</p>
 <pre class="r"><code>ggplot() + 
   geom_lollipop(
@@ -225,7 +225,7 @@ By reading the lollipop chart, you can see that Nebraska, Oklahoma, and Texas we
     axis.title = element_text(size = 10),
     plot.subtitle = element_text(size=10),
     panel.grid.minor = element_blank())</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-11-1.png" width="384" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 There is no color on that chart. None. Nebraska, Texas &amp; Oklahoma are all bad at pass defense in 2021. Oklahoma and Texas have an excuse because they are in the Big 12 so they give up a boatload of passing yards. But Nebraska is in the BIG – and they returned their entire secondary from last season, so they don’t have any good reason as to why they are not in the top-25 in terms of pass defense.</p>
 <p>So now we can make another cowplot putting these two lollipop charts side-by-side. We will do the same thing as we did for the bar graphs, but instead of labeling them “bar1” &amp; “bar2,” let’s name them “lollipop1” &amp; “lollipop2.”</p>
 <pre class="r"><code>lollipop1 &lt;-
@@ -273,7 +273,7 @@ There is no color on that chart. None. Nebraska, Texas &amp; Oklahoma are all ba
     panel.grid.minor = element_blank())</code></pre>
 <p>Now that we have our dataframes created, we can use plot_grid once again and put the two lollipop charts next to each other.</p>
 <pre class="r"><code>plot_grid(lollipop1, lollipop2)</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-14-1.png" width="556.8" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 Finally, let’s make our final chart. First, we will take a look at the rushing defense statistics for 2009 but this time, instead of comparing it to just the top-25 schools, let’s compare to all 120.</p>
 <pre class="r"><code>NebraskaRushingDefense2009 &lt;- RushingDefense2009 %&gt;% filter(Name == &#39;Nebraska&#39;) 
 TexasRushingDefense2009 &lt;- RushingDefense2009 %&gt;% filter(Name == &#39;Texas&#39;)
@@ -349,7 +349,7 @@ This season, Nebraska and Oklahoma are in a good spot - allowing less that 150 y
     panel.grid.minor = element_blank())</code></pre>
 <p>Now we can use plot_grid once again to put them side-by-side.</p>
 <pre class="r"><code>plot_grid(scatterplot1, scatterplot2)</code></pre>
-<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-21-1.png" width="576" />
+<p><img src="http://nicksehnert.github.io/2021/10/25/nebraska-s-defense-in-2009-vs-the-2021-blackshirts/index_files/figure-html/unnamed-chunk-21-1.png" width="480" />
 Surprisingly, Oklahoma has performed really well against the run this season. Part of that may be because the Big 12 doesn’t run the pigskin a ton but it also helps that Perrion Winfrey is a member of their front 4. Nebraska is allowing less than 140 yards per game and against the Purdue Boilermakers on Saturday, they were right on pace allowing 116 rushing yards.</p>
 
     </div>
